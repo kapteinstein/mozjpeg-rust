@@ -94,13 +94,13 @@ impl<'markers> DecompressConfig<'markers> {
     }
 
     #[inline]
-    #[cfg(all(unix, not(target_arch="wasm32")))]
+    #[cfg(unix)]
     pub fn from_path<P: AsRef<Path>>(self, path: P) -> io::Result<Decompress<'static>> {
         self.from_file(File::open(path)?)
     }
 
     #[inline]
-    #[cfg(all(unix, not(target_arch="wasm32")))]
+    #[cfg(unix)]
     pub fn from_file(self, file: File) -> io::Result<Decompress<'static>> {
         let mut d = self.create();
         d.set_file_src(Box::new(file))?;
@@ -176,7 +176,7 @@ impl<'src> Decompress<'src> {
     }
 
     #[inline]
-    #[cfg(all(unix, not(target_arch="wasm32")))]
+    #[cfg(unix)]
     /// Decode file at path
     pub fn new_path<P: AsRef<Path>>(path: P) -> io::Result<Self> {
         Self::config().from_path(path)
@@ -226,7 +226,7 @@ impl<'src> Decompress<'src> {
         }
     }
 
-    #[cfg(all(unix, not(target_arch="wasm32")))]
+    #[cfg(unix)]
     fn set_file_src(&mut self, file: Box<File>) -> io::Result<()> {
         unsafe {
             let fh = fdopen(file.as_raw_fd(), b"rb".as_ptr() as *const _);
